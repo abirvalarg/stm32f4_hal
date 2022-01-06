@@ -5,7 +5,7 @@ extern "C" {
     fn unmask_irq();
 }
 
-pub fn block_irq(func: &mut dyn FnMut()) {
+pub fn block_irq<F: Fn()>(func: F) {
     unsafe {
         mask_irq();
         func();

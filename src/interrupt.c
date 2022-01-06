@@ -38,8 +38,8 @@ const word *__vector[] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 40
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 50
     0, 0, 0, 0,
-//    (word*)_tim6_dac,
-//    (word*)_tim7
+    (word*)_tim6_dac,
+    (word*)_tim7
 };
 
 __attribute__((noreturn))

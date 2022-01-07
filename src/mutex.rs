@@ -21,6 +21,12 @@ impl<T> Mutex<T> {
         Mutex(UnsafeCell::new(value))
     }
 
+    pub const fn as_const(&self) -> &T {
+        unsafe {
+            &*(self.0.get() as *const T)
+        }
+    }
+
     pub fn lock(&self) -> MutexGuard<T> {
         unsafe {
             mask_irq();

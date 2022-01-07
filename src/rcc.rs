@@ -48,6 +48,14 @@ impl Rcc {
         }
         self
     }
+
+    pub fn apb2_enable(&mut self, pos: Apb2Module) -> &mut Self {
+        unsafe {
+            let enr = volatile_read(&(*self.0).APB2ENR);
+            volatile_write(&mut (*self.0).APB2ENR, enr | (1 << pos as usize));
+        }
+        self
+    }
 }
 
 #[non_exhaustive]
@@ -61,4 +69,9 @@ pub enum Ahb1Module {
 pub enum Apb1Module {
     TIM6 = 4,
     TIM7 = 5
+}
+
+#[non_exhaustive]
+pub enum Apb2Module {
+    SPI1 = 12
 }

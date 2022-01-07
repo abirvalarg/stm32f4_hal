@@ -1,5 +1,6 @@
 use crate::volatile::*;
 
+#[cold]
 pub fn enable_irq(pos: usize) {
     let block = pos / 32;
     let pos = pos % 32;
@@ -8,3 +9,10 @@ pub fn enable_irq(pos: usize) {
     }
 }
 
+
+#[non_exhaustive]
+#[allow(non_camel_case_types)]
+pub enum Irq {
+    TIM6_DAC = 54,
+    TIM7 = 55
+}

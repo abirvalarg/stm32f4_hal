@@ -4,7 +4,7 @@
 extern byte _STACK, _DATA_START, _DATA_END, _DATA_VAL_START, _BSS_START, _BSS_END,
     _HEAP_START, _HEAP_END;
 
-static byte irqMaskCount = 0;
+static volatile byte irqMaskCount = 0;
 
 void _reset();
 void _nmi();

@@ -25,6 +25,7 @@ pub struct Basic {
 }
 
 impl Basic {
+    #[cold]
     pub const unsafe fn new(addr: usize) -> Basic {
         Basic {
             hw: addr as *mut Reg,
@@ -32,6 +33,7 @@ impl Basic {
         }
     }
 
+    #[cold]
     pub fn one_pulse(&mut self, state: bool) {
         unsafe {
             let cr = volatile_read(&(*self.hw).CR1);

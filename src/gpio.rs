@@ -1,3 +1,6 @@
+mod slice;
+pub use slice::Slice;
+
 use crate::volatile::*;
 use crate::mutex::block_irq;
 

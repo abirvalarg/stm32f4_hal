@@ -67,6 +67,8 @@ pub enum Ahb1Module {
 
 #[non_exhaustive]
 pub enum Apb1Module {
+    TIM3 = 1,
+    TIM4 = 2,
     TIM6 = 4,
     TIM7 = 5
 }

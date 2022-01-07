@@ -1,7 +1,8 @@
 use crate::volatile::*;
 
 #[cold]
-pub fn enable_irq(pos: usize) {
+pub fn enable_irq(pos: Irq) {
+    let pos = pos as usize;
     let block = pos / 32;
     let pos = pos % 32;
     unsafe {

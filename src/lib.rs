@@ -33,6 +33,9 @@ pub static GPIOA: Mutex<Gpio> = unsafe { Mutex::new(Gpio::new(0x4002_0000)) };
 pub static GPIOB: Mutex<Gpio> = unsafe { Mutex::new(Gpio::new(0x4002_0400)) };
 pub static GPIOC: Mutex<Gpio> = unsafe { Mutex::new(Gpio::new(0x4002_0800)) };
 
+
+pub static TIM3: Mutex<timer::GP34> = unsafe { Mutex::new(timer::GP34::new(0x4000_0400)) };
+pub static TIM4: Mutex<timer::GP34> = unsafe { Mutex::new(timer::GP34::new(0x4000_0800)) };
 pub static TIM6: Mutex<timer::Basic> = unsafe { Mutex::new(timer::Basic::new(0x4000_1000)) };
 pub static TIM7: Mutex<timer::Basic> = unsafe { Mutex::new(timer::Basic::new(0x4000_1400)) };
 

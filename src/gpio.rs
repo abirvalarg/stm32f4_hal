@@ -26,11 +26,11 @@ pub struct Pin {
     pin: u8
 }
 
-#[non_exhaustive]
 pub enum Mode {
     Input = 0b00,
     Output = 0b01,
-    Alternate = 0b10
+    Alternate = 0b10,
+    Analog = 0b11
 }
 
 pub enum PullMode {

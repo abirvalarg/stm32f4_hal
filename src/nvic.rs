@@ -14,6 +14,10 @@ pub fn enable_irq(pos: Irq) {
 #[non_exhaustive]
 #[allow(non_camel_case_types)]
 pub enum Irq {
+    TIM3 = 29,
+    TIM4 = 30,
+    USART1 = 37,
+    USART3 = 39,
     TIM6_DAC = 54,
     TIM7 = 55
 }

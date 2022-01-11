@@ -1,6 +1,6 @@
 use crate::mutex::Mutex;
 use crate::abstr::timer::Timer;
-use crate::{TIM6, TIM7};
+use crate::{TIM3, TIM4, TIM6, TIM7, USART1, USART3};
 
 type Handler = &'static mut dyn FnMut();
 
@@ -31,6 +31,32 @@ extern "C" fn _hardfault() {
         Some(handler) => handler(),
         None => panic!()
     }
+}
+
+#[no_mangle]
+extern "C" fn _tim3() {
+    let mut tim = TIM3.lock();
+    if tim.clear_flag() {
+        tim.reload();
+    }
+}
+
+#[no_mangle]
+extern "C" fn _tim4() {
+    let mut tim = TIM4.lock();
+    if tim.clear_flag() {
+        tim.reload();
+    }
+}
+
+#[no_mangle]
+extern "C" fn _usart1() {
+    USART1.lock().check_state();
+}
+
+#[no_mangle]
+extern "C" fn _usart3() {
+    USART3.lock().check_state();
 }
 
 #[no_mangle]

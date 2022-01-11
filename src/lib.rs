@@ -15,6 +15,10 @@ pub mod abstr;
 pub mod gpio;
 pub mod timer;
 pub mod spi;
+pub mod analog;
+pub mod usart;
+
+pub mod lcd1602;
 
 #[cfg(feature = "default_panic")]
 #[panic_handler]
@@ -38,6 +42,10 @@ pub static TIM3: Mutex<timer::GP34> = unsafe { Mutex::new(timer::GP34::new(0x400
 pub static TIM4: Mutex<timer::GP34> = unsafe { Mutex::new(timer::GP34::new(0x4000_0800)) };
 pub static TIM6: Mutex<timer::Basic> = unsafe { Mutex::new(timer::Basic::new(0x4000_1000)) };
 pub static TIM7: Mutex<timer::Basic> = unsafe { Mutex::new(timer::Basic::new(0x4000_1400)) };
+pub static USART3: Mutex<usart::Usart> = unsafe { Mutex::new(usart::Usart::new(0x4000_4800)) };
+
+pub static USART1: Mutex<usart::Usart> = unsafe { Mutex::new(usart::Usart::new(0x4001_1000)) };
+pub static ADC: Mutex<analog::ADC> = unsafe { Mutex::new(analog::ADC::new(0x4001_2000)) };
 
 pub static SPI1: Mutex<Spi> = unsafe { Mutex::new(Spi::new(
     0x4001_3000,

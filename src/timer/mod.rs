@@ -58,52 +58,53 @@ macro_rules! impl_timer {
     ($name:ident, $rel_hnd:ident) => {
         use crate::abstr::timer::Timer;
         use crate::volatile::*;
+        impl $name {
+            pub fn on_reload<F: FnMut() + 'static>(&mut self, handler: F) -> &mut Self {
+                self.$rel_hnd = Some(Box::new(handler));
+                self
+            }
+        }
         impl Timer for $name {
             #[cold]
-            fn one_pulse(&mut self, state: bool) -> &mut Self{
+            fn one_pulse(&mut self, state: bool) {
                 unsafe {
                     let cr = volatile_read(&(*self.hw).CR1);
                     volatile_write(&mut (*self.hw).CR1, 
                         if state { cr | (1 << 3) }
                         else { cr & !(1 << 3) });
                 }
-                self
             }
 
-            fn interrupt(&mut self, state: bool) -> &mut Self {
+            fn interrupt(&mut self, state: bool) {
                 unsafe {
                     let cr = volatile_read(&(*self.hw).DIER);
                     volatile_write(&mut (*self.hw).DIER, 
                         if state { cr | 1 }
                         else { cr & !1 });
                 }
-                self
             }
 
-            fn reload(&mut self) -> &mut Self{
+            fn reload(&mut self) {
                 if let Some(h) = &mut self.$rel_hnd {
                     h();
                 }
-                self
             }
 
-            fn start(&mut self) -> &mut Self {
+            fn start(&mut self) {
                 unsafe {
                     let cr = volatile_read(&(*self.hw).CR1);
                     volatile_write(&mut (*self.hw).CR1, cr | 1);
                 }
-                self
             }
 
-            fn stop(&mut self) -> &mut Self {
+            fn stop(&mut self) {
                 unsafe {
                     let cr = volatile_read(&(*self.hw).CR1);
                     volatile_write(&mut (*self.hw).CR1, cr & !1);
                 }
-                self
             }
 
-            fn set_prescaller(&mut self, psc: usize) -> &mut Self{
+            fn set_prescaller(&mut self, psc: usize) {
                 unsafe {
                     let dier = volatile_read(&(*self.hw).DIER);
                     volatile_write(&mut (*self.hw).DIER, 0);
@@ -112,14 +113,12 @@ macro_rules! impl_timer {
                     while !self.clear_flag() {}
                     volatile_write(&mut (*self.hw).DIER, dier);
                 }
-                self
             }
 
-            fn set_reload(&mut self, arr: usize) -> &mut Self {
+            fn set_reload(&mut self, arr: usize) {
                 unsafe {
                     volatile_write(&mut (*self.hw).ARR, arr & 0xffff);
                 }
-                self
             }
 
             fn get_count(&self) -> usize {
@@ -128,26 +127,21 @@ macro_rules! impl_timer {
                 }
             }
 
-            fn on_reload<F: FnMut() + 'static>(&mut self, handler: F) -> &mut Self {
-                self.$rel_hnd = Some(Box::new(handler));
-                self
-            }
 
-            fn trigger(&mut self) -> &mut Self {
+            fn trigger(&mut self) {
                 unsafe {
                     volatile_write(&mut (*self.hw).EGR, 1);
                 }
-                self
             }
 
             fn clear_flag(&mut self) -> bool {
                 let sr = unsafe { volatile_read(&(*self.hw).SR) };
-                if sr == 1 {
+                if sr & 1 == 1 {
                     unsafe {
                         volatile_write(&mut (*self.hw).SR, 0);
                     }
                 }
-                sr == 1
+                sr & 1 == 1
             }
         }
     };

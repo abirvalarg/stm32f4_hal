@@ -70,10 +70,15 @@ pub enum Apb1Module {
     TIM3 = 1,
     TIM4 = 2,
     TIM6 = 4,
-    TIM7 = 5
+    TIM7 = 5,
+    USART3 = 18
 }
 
 #[non_exhaustive]
 pub enum Apb2Module {
+    USART1 = 4,
+    ADC1 = 8,
+    ADC2 = 9,
+    ADC3 = 10,
     SPI1 = 12
 }

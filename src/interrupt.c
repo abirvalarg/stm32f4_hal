@@ -9,8 +9,12 @@ static volatile byte irqMaskCount = 0;
 void _reset();
 void _nmi();
 void _hardfault();
+void _tim3();
+void _tim4();
 void _tim6_dac();
 void _tim7();
+void _usart1();
+void _usart3();
 void start();
 
 void mask_irq()
@@ -34,8 +38,8 @@ const word *__vector[] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 0
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 10
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 20
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 30
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 40
+    0, 0, 0, 0, 0, 0, 0, 0, 0, (word*)_tim3, // 30
+    (word*)_tim4, 0, 0, 0, 0, 0, 0, (word*)_usart1, 0, (word*)_usart3, // 40
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 50
     0, 0, 0, 0,
     (word*)_tim6_dac,
@@ -53,10 +57,9 @@ void _reset()
     
     init_heap((word*)&_HEAP_START, (word*)&_HEAP_END);
     
-    asm("push {r0}\n\
-    ldr r0, =0b100\n\
-    msr CONTROL, r0\n\
-    pop {r0}");
+    *(word*)0xE000ED88 = 0xf << 20;
+    asm("dsb");
+    asm("isb");
     start();
     while(1);
 }

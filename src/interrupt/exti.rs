@@ -39,6 +39,12 @@ impl Exti {
 			volatile_read(&(*self.0).PR)
 		}
 	}
+
+	pub fn clear_pending(&mut self) {
+		unsafe {
+			volatile_write(&mut (*self.0).PR, self.get_pending());
+		}
+	}
 }
 
 #[derive(PartialEq)]

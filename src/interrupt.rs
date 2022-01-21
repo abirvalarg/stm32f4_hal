@@ -9,7 +9,7 @@ use crate::{TIM3, TIM4, TIM6, TIM7, USART1, USART3, SYSCFG};
 
 type Handler = Box<dyn FnMut()>;
 
-static EXTI: crate::Mutex<exti::Exti> = unsafe { crate::Mutex::new(exti::Exti::new(0x4001_4000)) };
+static EXTI: crate::Mutex<exti::Exti> = unsafe { crate::Mutex::new(exti::Exti::new(0x4001_3c00)) };
 
 const NO_HANDLER: Option<Handler> = None;
 
@@ -51,7 +51,8 @@ extern "C" fn _hardfault() {
 
 #[no_mangle]
 extern "C" fn _exti() {
-    let pending = EXTI.lock().get_pending();
+    let mut exti = EXTI.lock();
+    let pending = exti.get_pending();
     let mut handlers = EXTI_INT.lock();
     for pos in 0..16 {
         if pending & (1 << pos) != 0 {
@@ -60,6 +61,7 @@ extern "C" fn _exti() {
             }
         }
     }
+    exti.clear_pending();
 }
 
 #[no_mangle]

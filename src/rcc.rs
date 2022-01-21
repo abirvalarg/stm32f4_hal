@@ -80,5 +80,6 @@ pub enum Apb2Module {
     ADC1 = 8,
     ADC2 = 9,
     ADC3 = 10,
-    SPI1 = 12
+    SPI1 = 12,
+    SYSCFG = 14
 }

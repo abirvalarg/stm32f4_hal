@@ -6,6 +6,7 @@
 
 mod volatile;
 mod malloc;
+pub mod syscfg;
 pub mod rcc;
 pub mod nvic;
 pub mod mutex;
@@ -46,6 +47,7 @@ pub static USART3: Mutex<usart::Usart> = unsafe { Mutex::new(usart::Usart::new(0
 
 pub static USART1: Mutex<usart::Usart> = unsafe { Mutex::new(usart::Usart::new(0x4001_1000)) };
 pub static ADC: Mutex<analog::ADC> = unsafe { Mutex::new(analog::ADC::new(0x4001_2000)) };
+pub static SYSCFG: Mutex<syscfg::Syscfg> = unsafe { Mutex::new(syscfg::Syscfg::new(0x4001_3800)) };
 
 pub static SPI1: Mutex<Spi> = unsafe { Mutex::new(Spi::new(
     0x4001_3000,

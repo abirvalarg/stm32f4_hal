@@ -16,6 +16,14 @@ impl<T> Box<T> {
     }
 }
 
+impl<T: Clone> Clone for Box<T> {
+    fn clone(&self) -> Self {
+        unsafe {
+            Box::new(self.0.as_ref().clone())
+        }
+    }
+}
+
 impl<T: ?Sized> Deref for Box<T> {
     type Target = T;
     fn deref(&self) -> &T {

@@ -9,6 +9,7 @@ static volatile byte irqMaskCount = 0;
 void _reset();
 void _nmi();
 void _hardfault();
+void _exti();
 void _tim3();
 void _tim4();
 void _tim6_dac();
@@ -36,11 +37,11 @@ const word *__vector[] = {
     (word*)_nmi,
     (word*)_hardfault,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 0
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 10
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 20
-    0, 0, 0, 0, 0, 0, 0, 0, 0, (word*)_tim3, // 30
+    0, 0, 0, 0, 0, 0, (word*)_exti, (word*)_exti, (word*)_exti, (word*)_exti, // 10
+    (word*)_exti, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 20
+    0, 0, 0, (word*)_exti, 0, 0, 0, 0, 0, (word*)_tim3, // 30
     (word*)_tim4, 0, 0, 0, 0, 0, 0, (word*)_usart1, 0, (word*)_usart3, // 40
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 50
+    (word*)_exti, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 50
     0, 0, 0, 0,
     (word*)_tim6_dac,
     (word*)_tim7

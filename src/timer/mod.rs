@@ -46,6 +46,15 @@ impl PwmChannel {
         self
     }
 
+    pub fn stop(&mut self) -> &mut Self {
+        unsafe {
+            let mut cr = volatile_read(self.cr);
+            cr &= !((0b110 << 4) << if self.cr_high { 8 } else { 0 });
+            volatile_write(self.cr, cr);
+        }
+        self
+    }
+
     pub fn value(&mut self, value: u32) -> &mut Self {
         unsafe {
             volatile_write(self.counter, value as usize);

@@ -1,4 +1,5 @@
 use crate::volatile::*;
+use crate::mutex::block_irq;
 
 #[repr(C)]
 #[allow(non_snake_case)]
@@ -56,6 +57,33 @@ impl Rcc {
         }
         self
     }
+
+    pub fn set_pll(&mut self, m: usize, n: usize, p: usize, q: usize, src: PLLSource) -> &mut Self {
+        block_irq(|| {
+            unsafe {
+                volatile_write(&mut (*self.0).PLLCFGR,
+                    (m & 0b111111) |
+                    ((n & ((1 << 10) - 1)) << 6) |
+                    ((p & 0b11) << 16) |
+                    (q & 0b1111) << 24 |
+                    (src as usize & 1) << 22);
+            }
+        });
+        self
+    }
+
+    pub fn set_prescallers(&mut self, ahb: usize, apb1: usize, apb2: usize) -> &mut Self {
+        block_irq(|| {
+            unsafe {
+                volatile_write(&mut (*self.0).CFGR,
+                    ((ahb & 0b1111) << 4) |
+                    ((apb1 & 0b111) << 10) |
+                    ((apb2 & 0b111) << 13)
+                );
+            }
+        });
+        self
+    }
 }
 
 #[non_exhaustive]
@@ -82,4 +110,10 @@ pub enum Apb2Module {
     ADC3 = 10,
     SPI1 = 12,
     SYSCFG = 14
+}
+
+#[derive(Copy, Clone)]
+pub enum PLLSource {
+    HSI = 0,
+    HSE = 1
 }

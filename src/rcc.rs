@@ -91,6 +91,8 @@ pub enum Ahb1Module {
     GPIOA = 0,
     GPIOB = 1,
     GPIOC = 2,
+    DMA1 = 21,
+    DMA2 = 22,
 }
 
 #[non_exhaustive]

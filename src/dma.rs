@@ -20,9 +20,22 @@ struct StreamReg {
 }
 
 pub struct DMA(*mut DmaReg);
+pub struct DmaStream(*mut StreamReg);
 
 impl DMA {
     pub const unsafe fn new(addr: usize) -> DMA {
         DMA(addr as *mut DmaReg)
     }
+
+    pub fn stream(&self, stream: usize) -> DmaStream {
+        unsafe {
+            DmaStream(&mut (*self.0).S[stream])
+        }
+    }
+}
+
+enum Mode {
+    PeripheralToMemory = 0b00,
+    MemoryToPeripheral = 0b01,
+    MemoryToMemory = 0b10
 }

@@ -18,6 +18,7 @@ pub mod timer;
 pub mod spi;
 pub mod analog;
 pub mod usart;
+pub mod dma;
 
 pub mod lcd1602;
 
@@ -31,12 +32,15 @@ pub use mutex::Mutex;
 pub use ptr::Box;
 use gpio::Gpio;
 use spi::Spi;
+use dma::DMA;
 
 pub static RCC: mutex::Mutex<rcc::Rcc> = unsafe { mutex::Mutex::new(rcc::Rcc::new(0x4002_3800)) };
 
 pub static GPIOA: Mutex<Gpio> = unsafe { Mutex::new(Gpio::new(0x4002_0000)) };
 pub static GPIOB: Mutex<Gpio> = unsafe { Mutex::new(Gpio::new(0x4002_0400)) };
 pub static GPIOC: Mutex<Gpio> = unsafe { Mutex::new(Gpio::new(0x4002_0800)) };
+pub static DMA1: Mutex<DMA> = unsafe { Mutex::new(DMA::new(0x4002_6000)) };
+pub static DMA2: Mutex<DMA> = unsafe { Mutex::new(DMA::new(0x4002_6400)) };
 
 
 pub static TIM3: Mutex<timer::GP34> = unsafe { Mutex::new(timer::GP34::new(0x4000_0400)) };

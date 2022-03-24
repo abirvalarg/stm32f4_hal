@@ -76,8 +76,10 @@ impl Pin {
     pub fn alternative(&mut self, af: u8) -> &mut Self {
         let af = af as usize;
         let block = unsafe { if self.pin / 8 == 0 { &mut (*self.gpio).AFRL } else { &mut (*self.gpio).AFRH } };
-        let val = *block & !(0b1111 << (self.pin % 8) * 4);
-        *block = val | (af << (self.pin % 8) * 4);
+        let val = unsafe { volatile_read(block as *mut _) } & !(0b1111 << (self.pin % 8) * 4);
+        unsafe {
+            volatile_write(block, val | (af << (self.pin % 8) * 4));
+        }
         self
     }
 
@@ -93,7 +95,9 @@ impl Pin {
     pub fn write(&mut self, state: bool) {
         let bsrr = unsafe { &mut (*self.gpio).BSRR };
         let pos = self.pin + if state { 0 } else { 16 };
-        *bsrr = 1 << pos;
+        unsafe {
+            volatile_write(bsrr, 1 << pos);
+        }
     }
 
     pub fn read(&self) -> bool {

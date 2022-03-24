@@ -9,4 +9,5 @@ edition = "2021"
 cc = "^1.0"
 
 [features]
+default = ["default_panic"]
 default_panic = []

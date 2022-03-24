@@ -84,6 +84,38 @@ impl Rcc {
         });
         self
     }
+
+    pub fn enable_hse(&mut self) -> &mut Self {
+        unsafe {
+            let cir = volatile_read(&mut (*self.0).CIR);
+            volatile_write(&mut (*self.0).CIR, cir | (1 << 11));
+            let cr = volatile_read(&(*self.0).CR);
+            volatile_write(&mut (*self.0).CR, cr | (1 << 16));
+            while volatile_read(&(*self.0).CIR) & (1 << 3) == 0 {}
+            volatile_write(&mut (*self.0).CIR, 1 << 19);
+        }
+        self
+    }
+
+    pub fn enable_pll(&mut self) -> &mut Self {
+        unsafe {
+            let cir = volatile_read(&mut (*self.0).CIR);
+            volatile_write(&mut (*self.0).CIR, cir | (1 << 12));
+            let cr = volatile_read(&(*self.0).CR);
+            volatile_write(&mut (*self.0).CR, cr | (1 << 24));
+            while volatile_read(&(*self.0).CIR) & (1 << 4) == 0 {}
+            volatile_write(&mut (*self.0).CIR, 1 << 20);
+        }
+        self
+    }
+
+    pub fn set_clock_source(&mut self, clock_source: ClockSource) -> &mut Self {
+        unsafe {
+            let cfgr = volatile_read(&(*self.0).CFGR) & !(0b11);
+            volatile_write(&mut (*self.0).CFGR, cfgr | (clock_source as usize));
+        }
+        self
+    }
 }
 
 #[non_exhaustive]
@@ -106,6 +138,7 @@ pub enum Apb1Module {
 
 #[non_exhaustive]
 pub enum Apb2Module {
+    TIM1 = 0,
     USART1 = 4,
     ADC1 = 8,
     ADC2 = 9,
@@ -118,4 +151,11 @@ pub enum Apb2Module {
 pub enum PLLSource {
     HSI = 0,
     HSE = 1
+}
+
+#[derive(Copy, Clone)]
+pub enum ClockSource {
+    HSI = 0b00,
+    HSE = 0b01,
+    PLL = 0b10
 }

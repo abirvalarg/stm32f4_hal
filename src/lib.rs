@@ -19,6 +19,7 @@ pub mod spi;
 pub mod analog;
 pub mod usart;
 pub mod dma;
+pub mod flash;
 
 pub mod lcd1602;
 
@@ -49,6 +50,8 @@ pub static TIM6: Mutex<timer::Basic> = unsafe { Mutex::new(timer::Basic::new(0x4
 pub static TIM7: Mutex<timer::Basic> = unsafe { Mutex::new(timer::Basic::new(0x4000_1400)) };
 pub static USART3: Mutex<usart::Usart> = unsafe { Mutex::new(usart::Usart::new(0x4000_4800)) };
 
+// APB2
+pub static TIM1: Mutex<timer::GP34> = unsafe { Mutex::new(timer::GP34::new(0x4001_0000)) };
 pub static USART1: Mutex<usart::Usart> = unsafe { Mutex::new(usart::Usart::new(0x4001_1000)) };
 pub static ADC: Mutex<analog::ADC> = unsafe { Mutex::new(analog::ADC::new(0x4001_2000)) };
 pub static SYSCFG: Mutex<syscfg::Syscfg> = unsafe { Mutex::new(syscfg::Syscfg::new(0x4001_3800)) };

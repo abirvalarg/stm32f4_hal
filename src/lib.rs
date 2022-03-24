@@ -66,3 +66,7 @@ pub static SPI1: Mutex<Spi> = unsafe { Mutex::new(Spi::new(
     GPIOA.as_const().pin(5),
     GPIOA.as_const().pin(4),
     5)) };
+
+pub mod prelude {
+    pub use crate::{Box, String, Mutex, string::ToString, abstr::comm::Communication, abstr::timer::Timer};
+}

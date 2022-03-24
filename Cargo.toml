@@ -9,7 +9,6 @@ edition = "2021"
 cc = "^1.0"
 
 [dependencies]
-num-traits = "^0.2.14"
 
 [features]
 default = ["default_panic"]

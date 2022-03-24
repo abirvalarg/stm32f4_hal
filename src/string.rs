@@ -1,3 +1,5 @@
+use core::ops::Add;
+
 use crate::malloc::*;
 
 pub struct String {
@@ -55,21 +57,25 @@ impl Drop for String {
 	}
 }
 
-impl<T> From<T> for String
-	where T: num_traits::sign::Unsigned
-{
-	fn from(mut val: T) -> Self {
-		let mut buffer = [' '; 32];
+pub trait ToString {
+	fn to_string(&self) -> String;
+}
+
+impl ToString for u32 {
+	fn to_string(&self) -> String {
+		let mut val = *self;
+		let mut buffer = [0; 32];
 		let mut num_digits = 0;
 		while val != 0 {
 			let digit = val % 10;
 			val /= 10;
-			buffer[31 - num_digits] = digit + '0';
+			buffer[31 - num_digits] = digit as u8 + '0' as u8;
+			num_digits += 1;
 		}
 		if num_digits == 0 {
 			"0".into()
 		} else {
-			buffer[31 - num_digits..].into()
+			core::str::from_utf8(&buffer[31 - num_digits..]).unwrap().into()
 		}
 	}
 }

@@ -133,6 +133,7 @@ pub enum Apb1Module {
     TIM4 = 2,
     TIM6 = 4,
     TIM7 = 5,
+    USART2 = 17,
     USART3 = 18
 }
 

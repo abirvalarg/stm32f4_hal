@@ -20,6 +20,7 @@ pub mod analog;
 pub mod usart;
 pub mod dma;
 pub mod flash;
+pub mod string;
 
 pub mod lcd1602;
 
@@ -31,6 +32,7 @@ fn __panic(_: &core::panic::PanicInfo) -> ! {
 
 pub use mutex::Mutex;
 pub use ptr::Box;
+pub use string::String;
 use gpio::Gpio;
 use spi::Spi;
 use dma::DMA;
@@ -48,6 +50,7 @@ pub static TIM3: Mutex<timer::GP34> = unsafe { Mutex::new(timer::GP34::new(0x400
 pub static TIM4: Mutex<timer::GP34> = unsafe { Mutex::new(timer::GP34::new(0x4000_0800)) };
 pub static TIM6: Mutex<timer::Basic> = unsafe { Mutex::new(timer::Basic::new(0x4000_1000)) };
 pub static TIM7: Mutex<timer::Basic> = unsafe { Mutex::new(timer::Basic::new(0x4000_1400)) };
+pub static USART2: Mutex<usart::Usart> = unsafe { Mutex::new(usart::Usart::new(0x4000_4400)) };
 pub static USART3: Mutex<usart::Usart> = unsafe { Mutex::new(usart::Usart::new(0x4000_4800)) };
 
 // APB2
